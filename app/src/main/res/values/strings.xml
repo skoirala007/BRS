@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BRS</string>
+    <string name="heading">Bentley Ride Share</string>
+    <string name="description"> </string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="logIn">Log In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="test">This is Test</string>
+    <string name="signUpMessage"> New User </string>
+
+
+</resources>

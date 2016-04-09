@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.pravasagar.bentleyrideshare.LogIn"
+    android:background="#ceecf8">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:padding="2dp"
+        android:text="@string/heading"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        android:id="@+id/tvHeading"
+        android:textColor="#3c4784" />
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/picture1"
+        android:layout_below="@+id/tvHeading"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/description"
+        android:id="@+id/imageView1"
+        android:layout_marginTop="30dp"/>
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:inputType="textEmailAddress"
+        android:id="@+id/etUsername"
+        android:ems="10"
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffff"
+        android:layout_marginTop="30dp"
+        android:hint="@string/username"
+        android:textColorHint="#3c4784"
+        android:gravity="center_vertical"
+        android:textColor="#3c4784"
+        android:padding="8dp"
+        android:textStyle="bold|italic" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/etPassword"
+        android:layout_below="@id/etUsername"
+        android:layout_centerHorizontal="true"
+        android:background="#ffffff"
+        android:layout_marginTop="30dp"
+        android:hint="@string/password"
+        android:textColorHint="#3c4784"
+        android:gravity="center_vertical"
+        android:textColor="#3c4784"
+        android:padding="8dp"
+        android:textStyle="bold|italic" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:id="@+id/bLogIn"
+        android:text="@string/logIn"
+        android:layout_below="@id/etPassword"
+        android:background="#cb92aaf8"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="#3c4784"
+        android:padding="8dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_alignStart="@+id/etPassword"
+        android:layout_alignEnd="@+id/etPassword" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:id="@+id/bSignUp"
+        android:text="@string/signUp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="#cb92aaf8"
+        android:gravity="center_vertical|center_horizontal"
+        android:textColor="#3c4784"
+        android:padding="2dp"
+        android:textStyle="bold"
+        android:layout_marginLeft="10dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNewAc"
+        android:text="@string/signUpMessage"
+        android:textColor="#3c4784"
+        android:padding="2dp"
+        android:textStyle="bold|italic"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/bSignUp"
+        />
+
+</RelativeLayout>
