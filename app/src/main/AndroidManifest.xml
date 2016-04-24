@@ -15,7 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUp"></activity>
+        <activity android:name=".SignUp" />
+        <activity android:name=".Dashboard" />
+        <activity android:name=".MakeCarpool" />
+        <activity android:name=".FindCarpool" />
+        <activity android:name=".ViewCarpool"></activity>
     </application>
 
 </manifest>

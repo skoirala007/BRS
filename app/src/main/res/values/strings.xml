@@ -8,6 +8,10 @@
     <string name="signUp">Sign Up</string>
     <string name="test">This is Test</string>
     <string name="signUpMessage"> New User </string>
+    <string name="db_find">Find Carpool</string>
+    <string name="db_make">Make Carpool</string>
+    <string name="db_see">View Carpool</string>
+    <string name="db_welcome"> <u>Welcome To Dashboard</u></string>
 
 
 </resources>
