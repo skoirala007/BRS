@@ -12,6 +12,8 @@
     <string name="db_make">Make Carpool</string>
     <string name="db_see">View Carpool</string>
     <string name="db_welcome"> <u>Welcome To Dashboard</u></string>
+    <string name="fc_name">Name: </string>
+    <string name="fc_address">Address: </string>
 
 
 </resources>
