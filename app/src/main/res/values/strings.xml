@@ -5,7 +5,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="logIn">Log In</string>
-    <string name="signUp">Sign Up</string>
+    <string name="signUp">New User? Sign Up</string>
     <string name="test">This is Test</string>
     <string name="signUpMessage"> New User </string>
     <string name="db_find">Find Carpool</string>
