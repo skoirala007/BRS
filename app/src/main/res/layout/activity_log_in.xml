@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.pravasagar.brs.LogIn">
+    tools:context="com.example.pravasagar.brs.LogIn"
+    android:background="#ceecf8">
 
     <TextView
         android:layout_width="wrap_content"
@@ -16,12 +17,13 @@
         android:padding="2dp"
         android:text="@string/heading"
         android:textSize="35sp"
+        android:textStyle="bold"
         android:id="@+id/tvHeading"
         android:textColor="#3c4784" />
     <ImageView
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/picture"
+        android:src="@drawable/picture1"
         android:layout_below="@+id/tvHeading"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/description"
@@ -43,7 +45,8 @@
         android:textColorHint="#3c4784"
         android:gravity="center_vertical"
         android:textColor="#3c4784"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:textStyle="bold|italic" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -59,7 +62,8 @@
         android:textColorHint="#3c4784"
         android:gravity="center_vertical"
         android:textColor="#3c4784"
-        android:padding="8dp"/>
+        android:padding="8dp"
+        android:textStyle="bold|italic" />
 
     <Button
         android:layout_width="wrap_content"
@@ -72,6 +76,7 @@
         android:gravity="center_vertical|center_horizontal"
         android:textColor="#3c4784"
         android:padding="8dp"
+        android:textStyle="bold"
         android:textSize="20sp"
         android:layout_alignStart="@+id/etPassword"
         android:layout_alignEnd="@+id/etPassword" />
@@ -90,16 +95,16 @@
         android:layout_marginLeft="10dp"
         />
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/tvNewAc"-->
-        <!--android:text="@string/signUpMessage"-->
-        <!--android:textColor="#3c4784"-->
-        <!--android:padding="2dp"-->
-        <!--android:textStyle="bold|italic"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_toStartOf="@id/bSignUp"-->
-        <!--/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvNewAc"
+        android:text="@string/signUpMessage"
+        android:textColor="#3c4784"
+        android:padding="2dp"
+        android:textStyle="bold|italic"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/bSignUp"
+        />
 
 </RelativeLayout>

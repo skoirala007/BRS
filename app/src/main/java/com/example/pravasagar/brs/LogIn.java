@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 public class LogIn extends AppCompatActivity {
@@ -22,6 +23,10 @@ public class LogIn extends AppCompatActivity {
     boolean threadRunning = false;
     String convertedUsername;
     String convertedPassword;
+    ProgressBar progressBar1;
+    String wholeData;
+    String myName;
+    String myAddress;
 
     //Create Handler
     Handler handler = new Handler(){
@@ -29,29 +34,41 @@ public class LogIn extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if(msg.what == 1){
                 threadRunning = false;
+                wholeData =(String) msg.obj;
+
+                progressBar1.setVisibility(View.INVISIBLE);
 
                 //Start New Activity
                 Intent openDashboard = new Intent(LogIn.this,Dashboard.class);
+                openDashboard.putExtra("wholeData",wholeData);
                 startActivity(openDashboard);
 
             }
             else if (msg.what==0){
 
                     if (failedAttempt != 0) {
+                        progressBar1.setVisibility(View.INVISIBLE);
                         failedAttempt--;
                         Toast.makeText(getApplicationContext(), "Incorrect Username/Password, Please Try Again",
                                 Toast.LENGTH_SHORT).show();
                     }
                     else {
-                    Toast.makeText(getApplicationContext(), "Too Many Failed Attepts", Toast.LENGTH_SHORT).show();
-                    threadRunning = false;
-                    finish();
+                        progressBar1.setVisibility(View.INVISIBLE);
+                        Toast.makeText(getApplicationContext(), "Too Many Failed Attepts", Toast.LENGTH_SHORT).show();
+                        threadRunning = false;
+                        finish();
                 }
 
                     }
                 }
     };
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        threadRunning = false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +80,8 @@ public class LogIn extends AppCompatActivity {
         bSignUp=(Button) findViewById(R.id.bSignUp);
         etUsername =(EditText) findViewById(R.id.etUsername);
         etPassword = (EditText) findViewById(R.id.etPassword);
-
+        progressBar1 = (ProgressBar) findViewById(R.id.progress1);
+        progressBar1.setVisibility(View.INVISIBLE);
 
 
         //Set onclick listener for logIn button: for now we are checking admin admin until we get the database access
@@ -71,6 +89,7 @@ public class LogIn extends AppCompatActivity {
         bLogIn.setOnClickListener(
                 new Button.OnClickListener(){
                     public void onClick(View v){
+                        progressBar1.setVisibility(View.VISIBLE);
                         convertedUsername = etUsername.getText().toString();
                         convertedPassword = etPassword.getText().toString();
 
@@ -87,14 +106,18 @@ public class LogIn extends AppCompatActivity {
                         public void run() {
                             try{
                                 if (threadRunning){
+                                    Thread.sleep(6000);
                                     if(convertedUsername.equals("admin") && convertedPassword.equals("admin")){
+                                        String userFullName = "ABC XYZ";
+                                        String userFullAddress ="7 Myrtle St Somerville, MA 02145";
                                         logIn = 1;
+                                        msg = handler.obtainMessage(logIn, userFullName + "  "+ userFullAddress);
                                     }
                                     else if (!convertedUsername.equals("admin") || !convertedPassword.equals("admin")){
                                         logIn = 0;
+                                        msg = handler.obtainMessage(logIn);
                                     }
                                     //Create Message
-                                    msg = handler.obtainMessage(logIn);
                                     handler.sendMessage(msg);
 
                                 }
@@ -113,6 +136,7 @@ public class LogIn extends AppCompatActivity {
 
                 }
         );
+
 
 
         //Set onclick listener for signup button
