@@ -47,6 +47,16 @@
         android:textColor="#3c4784"
         android:padding="8dp"
         android:textStyle="bold|italic" />
+    <ProgressBar
+        android:layout_below="@+id/etUsername"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="2dp"
+        android:id="@+id/progress1"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+            >
+    </ProgressBar>
+
 
     <EditText
         android:layout_width="wrap_content"
