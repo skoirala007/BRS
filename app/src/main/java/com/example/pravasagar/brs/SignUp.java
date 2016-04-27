@@ -25,9 +25,7 @@ public class SignUp extends AppCompatActivity {
     private EditText fname;
     private EditText lname;
 
-    private String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
-    private String username = "asalvatori";
-    private String password = "cs680";
+
     private String TAG="SignUp TAG: ";
     private Button btnSignup;
     @Override
@@ -51,7 +49,9 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View v){
 
                 Toast.makeText(getApplicationContext(),"Welcome "+uname.getText().toString(),Toast.LENGTH_SHORT).show();
-
+                String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+                String username = "asalvatori";
+                String password = "cs680";
                 //Check if present
 
                 //Else Insert into DB
