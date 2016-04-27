@@ -28,7 +28,7 @@ public class SignUp extends AppCompatActivity {
     private String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
     private String username = "asalvatori";
     private String password = "cs680";
-    private String TAG="SignUp: ";
+    private String TAG="SignUp TAG: ";
     private Button btnSignup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +71,6 @@ public class SignUp extends AppCompatActivity {
                     //ResultSet result = stmt.executeQuery("");
                     String query="insert into user(UserId,Pass,LastName,FirstName,Street,Zip,email,city)"
                             +" values('"+uname.getText()+"','"
-                            +uname.getText()+"',"
                             +pwd.getText()+"',"
                             +lname.getText()+"',"
                             +fname.getText()+"',"
@@ -81,7 +80,7 @@ public class SignUp extends AppCompatActivity {
                             +city.getText()+"'"
                             +")";
                     Toast.makeText(getApplicationContext(),query,Toast.LENGTH_LONG).show();
-                    //Log.i(TAG,query);
+                    Log.i(TAG,query);
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
