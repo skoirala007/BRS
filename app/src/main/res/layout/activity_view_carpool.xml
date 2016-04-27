@@ -10,7 +10,8 @@
         android:id="@+id/yourRides"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your Rides"/>
+        android:text="Your Rides"
+        style="@style/dbTheme"/>
 
     <ListView
         android:id="@+id/rideList"

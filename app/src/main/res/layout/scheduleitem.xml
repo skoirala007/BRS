@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:paddingLeft="15dp">
     <TextView
         android:id="@+id/day"
         android:layout_width="wrap_content"
@@ -8,17 +9,20 @@
         android:paddingRight="5dp"
         android:text = "day"
         android:textAllCaps="true"
-        android:textColor="#3c4784"/>
+        android:textColor="#3c4784"
+        style="@style/fcTheme"/>
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:paddingRight="5dp"
         android:layout_height="wrap_content"
-        android:textColor="#3c4784"/>
+        android:textColor="#3c4784"
+        style="@style/fcTheme"/>
     <TextView
         android:id="@+id/drid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#3c4784"/>
+        android:textColor="#3c4784"
+        style="@style/fcTheme"/>
 
 </LinearLayout>
