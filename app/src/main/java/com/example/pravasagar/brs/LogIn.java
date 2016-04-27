@@ -33,7 +33,6 @@ public class LogIn extends AppCompatActivity {
     String convertedPassword;
     ProgressBar progressBar1;
     ArrayList<String> wholeData = new ArrayList<>();
-    String usernamePassword;
 
 
 

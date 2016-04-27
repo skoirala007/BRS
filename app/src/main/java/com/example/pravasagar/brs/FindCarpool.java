@@ -13,6 +13,12 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,16 +44,24 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
     TextView myFullName;
     TextView myFullAddress;
     boolean threadRunning1 = false;
-    Message msg1;
-    Message msg2;
-    Handler handler2;
+    Message msg;
     private GoogleMap myMap;
     private static final float zoom = 10.0f;
+    int logIn;
+    String test1;
+    String test2;
 
     //Create ArrayList for test since we do not have database
     ArrayList<String> testMembersAddress = new ArrayList<String>();
     ArrayList<String> testMembersName = new ArrayList<String>();
+    //Create handloer
+    Handler handler1 = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
 
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +127,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
     Runnable rMembersAddress = new Runnable() {
         @Override
         public void run() {
+
             try{
                 while (threadRunning1){
                     for (int i = 0; i<testMembersAddress.size();i++){
@@ -126,6 +141,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             finally {
                 threadRunning1 = false;
             }
+
         }
     };
 
@@ -155,6 +171,8 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
         LatLng myAddressLatLong = getLocation(getApplicationContext(),myAddress);
         //Center the map and adjust the zoom level in regards to my address
         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myAddressLatLong, zoom));
+        myFullName.setText(myUsername + " " + myPassword);
+        myFullAddress.setText(myAddress);
 
 
         //Add markers to the map and show only people withing 3 miles
@@ -169,7 +187,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                 myMap.addMarker(new MarkerOptions()
                         .position((memberLatitudeLongitude))
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
-                myFullAddress.setText(String.valueOf(distance));
+                //myFullAddress.setText(String.valueOf(distance));
             }
 
 
