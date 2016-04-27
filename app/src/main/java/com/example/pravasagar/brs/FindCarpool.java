@@ -3,6 +3,7 @@ package com.example.pravasagar.brs;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +29,10 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
     ArrayList<String> membersAddress = new ArrayList<String>();
     ArrayList<String> membersName = new ArrayList<String>();
     //Get my address from the database
-    String wholeData;
+    ArrayList<String> wholeData = new ArrayList<>();
+    String usernamePassword;
+    String myUsername;
+    String myPassword;
     String myAddress;
     String myName;
     TextView myFullName;
@@ -60,14 +64,18 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
 
         //get extra data sent
         Bundle sentData = getIntent().getExtras();
-            wholeData = sentData.getString("wholeData");
-            String splitArray [] = wholeData.split("  ", 2);
-                myName = splitArray[0];
-                myAddress = splitArray[1];
+        wholeData = sentData.getStringArrayList("wholeData");
+        myName = wholeData.get(0);
+        myAddress = wholeData.get(1);
+        myUsername= wholeData.get(2);
+        myPassword= wholeData.get(3);
 
-            //Set name and address
-            myFullName.setText(myName);
-            myFullAddress.setText(myAddress);
+
+
+
+        //Set name and address
+            //myFullName.setText(myName + " " + myUsername);
+            //myFullAddress.setText(myAddress + " "+ myPassword);
 
 
 
@@ -109,9 +117,6 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                 while (threadRunning1){
                     for (int i = 0; i<testMembersAddress.size();i++){
                         membersAddress.add(i,testMembersAddress.get(i));
-
-
-
                     }
                     threadRunning1 = false;
                 }
@@ -121,10 +126,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             finally {
                 threadRunning1 = false;
             }
-
-
         }
-
     };
 
     @Override
@@ -148,19 +150,27 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
         //Setup map as normal google map
         myMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
+
+        //get latlong for my address
+        LatLng myAddressLatLong = getLocation(getApplicationContext(),myAddress);
         //Center the map and adjust the zoom level in regards to my address
-        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom((getLocation(getApplicationContext(),myAddress)), zoom));
+        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(myAddressLatLong, zoom));
 
 
-        //Add markers to the map
+        //Add markers to the map and show only people withing 3 miles
 
 
         for (int i =0; i< membersAddress.size();i++){
-            LatLng latitudeLongitude = getLocation(getApplicationContext(), membersAddress.get(i));
 
-            myMap.addMarker(new MarkerOptions()
-                    .position((latitudeLongitude))
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+            LatLng memberLatitudeLongitude = getLocation(getApplicationContext(), membersAddress.get(i));
+            double distance = getDistance(myAddressLatLong, memberLatitudeLongitude);
+
+            if(distance <= 3) {
+                myMap.addMarker(new MarkerOptions()
+                        .position((memberLatitudeLongitude))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+                myFullAddress.setText(String.valueOf(distance));
+            }
 
 
         }
@@ -190,6 +200,25 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
 
         return latiLong;
 
+    }
+
+    //Method to calculate distance between two points
+
+    public double getDistance (LatLng first, LatLng second){
+        double distance =0;
+
+        Location locationA = new Location("A");
+        locationA.setLatitude(first.latitude);
+        locationA.setLongitude(first.longitude);
+
+        Location locationB = new Location("B");
+        locationB.setLatitude(second.latitude);
+        locationB.setLongitude(second.longitude);
+
+        //calculate distance
+        distance = (locationA.distanceTo(locationB))/1609.344;
+
+        return distance;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.pravasagar.brs;
 
 import android.content.Intent;
+import android.database.CursorJoiner;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 public class LogIn extends AppCompatActivity {
     Button bLogIn;
@@ -21,12 +28,14 @@ public class LogIn extends AppCompatActivity {
     Message msg;
     int logIn;
     boolean threadRunning = false;
+    Connection con = null;
     String convertedUsername;
     String convertedPassword;
     ProgressBar progressBar1;
-    String wholeData;
-    String myName;
-    String myAddress;
+    ArrayList<String> wholeData = new ArrayList<>();
+    String usernamePassword;
+
+
 
     //Create Handler
     Handler handler = new Handler(){
@@ -34,9 +43,19 @@ public class LogIn extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if(msg.what == 1){
                 threadRunning = false;
-                wholeData =(String) msg.obj;
-
+                String nameAddress =(String) msg.obj;
                 progressBar1.setVisibility(View.INVISIBLE);
+
+                //split the name and address
+                String splitWholeData [] = nameAddress.split("  ", 2);
+                String myName = splitWholeData [0];
+                String myAddress = splitWholeData[1];
+
+                //Add data to arraylist
+                wholeData.add(myName);
+                wholeData.add(myAddress);
+                wholeData.add(convertedUsername);
+                wholeData.add(convertedPassword);
 
                 //Start New Activity
                 Intent openDashboard = new Intent(LogIn.this,Dashboard.class);
@@ -84,8 +103,8 @@ public class LogIn extends AppCompatActivity {
         progressBar1.setVisibility(View.INVISIBLE);
 
 
-        //Set onclick listener for logIn button: for now we are checking admin admin until we get the database access
-        // Also we can stop numerous failed attempts by setting the counter. For Now we are setting it for five times
+        //Set onclick listener for logIn button
+
         bLogIn.setOnClickListener(
                 new Button.OnClickListener(){
                     public void onClick(View v){
@@ -104,20 +123,50 @@ public class LogIn extends AppCompatActivity {
                     Runnable r = new Runnable() {
                         @Override
                         public void run() {
+
+                            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+                            String userFullName = null;
+                            String userFullAddress = null;
+                            Statement stmt = null;
+
                             try{
                                 if (threadRunning){
-                                    Thread.sleep(6000);
-                                    if(convertedUsername.equals("admin") && convertedPassword.equals("admin")){
-                                        String userFullName = "ABC XYZ";
-                                        String userFullAddress ="7 Myrtle St Somerville, MA 02145";
+
+                                    //load driver to memory
+                                    try{
+                                        Class.forName("com.mysql.jdbc.Driver");
+
+                                    }catch (ClassNotFoundException e){
+                                        Log.e("JDBC", "Did not load driver");
+                                    }
+
+                                    try{
+                                        //create connection and statement objects
+                                        con = DriverManager.getConnection(URL,convertedUsername,convertedPassword);
+                                        stmt = con.createStatement();
+
+                                        //Do query
+                                        ResultSet result = stmt.executeQuery("Select * from bentleycarpool.user" + " " +
+                                                "Where User_Id = " + "'" + convertedUsername + "'");
+
+                                        while (result.next()) {
+                                            userFullName = (result.getString("FirstName") + " " + result.getString("LastName"));
+                                            userFullAddress = (result.getString("Street") + " " + result.getString("city") +
+                                                    result.getString("state"));}
+
+
                                         logIn = 1;
                                         msg = handler.obtainMessage(logIn, userFullName + "  "+ userFullAddress);
-                                    }
-                                    else if (!convertedUsername.equals("admin") || !convertedPassword.equals("admin")){
+
+
+                                    }catch (SQLException e) {
+                                        e.printStackTrace();
                                         logIn = 0;
                                         msg = handler.obtainMessage(logIn);
+
                                     }
-                                    //Create Message
+
+                                    //Send Message
                                     handler.sendMessage(msg);
 
                                 }
@@ -128,12 +177,8 @@ public class LogIn extends AppCompatActivity {
                                 // end the background thread
                                 threadRunning = false;
                             }
-
-
                         }
                     };
-
-
                 }
         );
 

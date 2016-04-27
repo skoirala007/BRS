@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 public class Dashboard extends AppCompatActivity {
     Button see;
@@ -15,7 +17,9 @@ public class Dashboard extends AppCompatActivity {
     Button find;
     TextView welCome;
 
-    String wholeData;
+    ArrayList<String> wholeData = new ArrayList<>();
+    String usernamePassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +28,7 @@ public class Dashboard extends AppCompatActivity {
 
         //Get Extra value from login
         Bundle sentData = getIntent().getExtras();
-        wholeData = sentData.getString("wholeData");
-
-
-
+        wholeData = sentData.getStringArrayList("wholeData");
 
         //Set reference for the buttons
         find = (Button) findViewById(R.id.find);

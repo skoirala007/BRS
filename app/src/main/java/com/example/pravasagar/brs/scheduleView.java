@@ -3,7 +3,7 @@ package com.example.pravasagar.brs;
 /**
  * Created by shruti on 4/26/2016.
  */
-public class ScheduleView {
+class ScheduleView {
 
     private String day;
     private String time;

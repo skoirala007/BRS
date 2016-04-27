@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by shruti on 4/26/2016.
  */
-public class ScheduleListAdapter extends ArrayAdapter<ScheduleView> {
+class ScheduleListAdapter extends ArrayAdapter<ScheduleView> {
 
     public ScheduleListAdapter(Context context, int resource, List<ScheduleView> objects) {
         super(context, resource, objects);
