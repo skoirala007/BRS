@@ -7,21 +7,35 @@ import android.widget.EditText;
 import android.widget.CheckBox;
 import android.widget.Button;
 import android.view.View.OnClickListener;
+import android.content.Intent;
 
 import android.util.Log;
+import android.widget.Toast;
+
+import java.sql.*;
+import java.util.ArrayList;
 
 public class MakeCarpool extends Activity {
 
     private EditText day_et, time_et, maxSeats_et, licensePlate_et, startStreet_et,
             startCity_et, startState_et, startZIP_et;
-    private CheckBox checkbox;
-    private String day, licensePlate, startStreet, startCity, startState, startZIP;
+    private CheckBox checkbox; // still need to make this checkbox work
+    private String userID, day, licensePlate, startStreet, startCity, startState, startZIP;
     private int time, maxSeats;
+    private Thread t = null;
+    private String carpoolSQL;
+
+    ArrayList<String> wholeData = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_carpool);
+
+        Bundle sentData = getIntent().getExtras();
+        wholeData = sentData.getStringArrayList("wholeData");
+
+        userID = wholeData.get(2);
 
         day_et = (EditText)findViewById(R.id.dayOfWeek);
         time_et = (EditText)findViewById(R.id.timeOfDay);
@@ -47,12 +61,112 @@ public class MakeCarpool extends Activity {
                 startState = startState_et.getText().toString();
                 startZIP = startZIP_et.getText().toString();
 
-                String carpoolSQL = "insert into Carpools values ('" + day + "', " + time + ", " +
-                        maxSeats + ", '" + licensePlate + "', '" + startStreet + "', '" +
-                        startCity + "', '" + startState + "', " + startZIP + ");";
+                // the SQL insert statement for the route_details table
+                carpoolSQL = "insert into route_details values (null, '" + userID + "', " + maxSeats + ", '" +
+                        day + "', '" + time + "', '" + licensePlate + "', '" + startStreet + "', '" +
+                        startZIP + "', '" + startCity + "', '" + startState + "');";
+
+                t = new Thread(insert);
+                t.start();
 
                 Log.i("SQL", carpoolSQL);
+
+                Toast.makeText(MakeCarpool.this, "Carpool was Created", Toast.LENGTH_LONG).show();
+
+                // I figured a user would want to see their carpool in the View Carpool activity
+                // after making one.  Feel free to change where the user is directed
+                Intent launchView = new Intent(MakeCarpool.this, ViewCarpool.class);
+                startActivity(launchView);
+            }
+        });
+
+        checkbox.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                t = new Thread(select);
+                t.start();
             }
         });
     }
+
+    private Runnable insert = new Runnable() {
+        public void run() {
+            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+            String username = "asalvatori";
+            String password = "cs680";
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            }
+            catch (ClassNotFoundException e) {
+
+            }
+
+            Statement stmt = null;
+            Connection con = null;
+            try {
+                con = DriverManager.getConnection(URL, username, password);
+                stmt = con.createStatement();
+            }
+            catch (SQLException e) {
+
+            }
+
+            try {
+                stmt.executeUpdate(carpoolSQL);
+
+                t = null;
+                con.close();
+            }
+            catch (SQLException e) {
+
+            }
+        }
+    };
+
+    private Runnable select = new Runnable() {
+        public void run() {
+            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+            String username = "asalvatori";
+            String password = "cs680";
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            }
+            catch (ClassNotFoundException e) {
+
+            }
+
+            Statement stmt = null;
+            Connection con = null;
+            try {
+                con = DriverManager.getConnection(URL, username, password);
+                stmt = con.createStatement();
+            }
+            catch (SQLException e) {
+
+            }
+
+            try {
+                ResultSet rs = stmt.executeQuery
+                        ("select Street, city, state, Zip from user where User_Id = '" + userID + "');");
+                while (rs.next()) {
+                    startStreet = rs.getString("Street");
+                    startCity = rs. getString("city");
+                    startState = rs.getString("state");
+                    startZIP = rs.getString("Zip");
+                }
+
+                startStreet_et.setText(startStreet);
+                startCity_et.setText(startCity);
+                startState_et.setText(startState);
+                startZIP_et.setText(startZIP);
+
+                t = null;
+                con.close();
+            }
+            catch (SQLException e) {
+
+            }
+        }
+    };
 }
