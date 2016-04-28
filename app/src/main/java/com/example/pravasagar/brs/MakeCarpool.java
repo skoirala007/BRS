@@ -66,7 +66,7 @@ public class MakeCarpool extends Activity {
                         day + "', '" + time + "', '" + licensePlate + "', '" + startStreet + "', '" +
                         startZIP + "', '" + startCity + "', '" + startState + "');";
 
-                t = new Thread(background);
+                t = new Thread(insert);
                 t.start();
 
                 Log.i("SQL", carpoolSQL);
@@ -79,9 +79,16 @@ public class MakeCarpool extends Activity {
                 startActivity(launchView);
             }
         });
+
+        checkbox.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                t = new Thread(select);
+                t.start();
+            }
+        });
     }
 
-    private Runnable background = new Runnable() {
+    private Runnable insert = new Runnable() {
         public void run() {
             String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
             String username = "asalvatori";
@@ -106,6 +113,53 @@ public class MakeCarpool extends Activity {
 
             try {
                 stmt.executeUpdate(carpoolSQL);
+
+                t = null;
+                con.close();
+            }
+            catch (SQLException e) {
+
+            }
+        }
+    };
+
+    private Runnable select = new Runnable() {
+        public void run() {
+            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+            String username = "asalvatori";
+            String password = "cs680";
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            }
+            catch (ClassNotFoundException e) {
+
+            }
+
+            Statement stmt = null;
+            Connection con = null;
+            try {
+                con = DriverManager.getConnection(URL, username, password);
+                stmt = con.createStatement();
+            }
+            catch (SQLException e) {
+
+            }
+
+            try {
+                ResultSet rs = stmt.executeQuery
+                        ("select Street, city, state, Zip from user where User_Id = '" + userID + "');");
+                while (rs.next()) {
+                    startStreet = rs.getString("Street");
+                    startCity = rs. getString("city");
+                    startState = rs.getString("state");
+                    startZIP = rs.getString("Zip");
+                }
+
+                startStreet_et.setText(startStreet);
+                startCity_et.setText(startCity);
+                startState_et.setText(startState);
+                startZIP_et.setText(startZIP);
 
                 t = null;
                 con.close();
