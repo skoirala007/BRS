@@ -42,7 +42,7 @@
     <EditText
         android:id="@+id/etUsername"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/tvSignUp"
         android:layout_margin="2sp"
@@ -54,12 +54,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/etUsername"
         android:layout_margin="2sp"
@@ -71,12 +72,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/etEmail"
         android:layout_margin="2sp"
@@ -88,12 +90,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etCnfPassword"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/etPassword"
         android:layout_margin="2sp"
@@ -105,12 +108,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etFName"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_below="@+id/etCnfPassword"
         android:layout_centerHorizontal="true"
         android:layout_margin="2sp"
@@ -122,12 +126,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etStreet"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/etPhone"
         android:layout_margin="2sp"
@@ -139,12 +144,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etCity"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/etStreet"
         android:layout_margin="2sp"
@@ -156,15 +162,18 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etZip"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignStart="@+id/etCity"
-        android:layout_below="@+id/etCity"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/etFName"
+        android:layout_below="@+id/etState"
         android:layout_margin="2sp"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
         android:background="#ffffff"
         android:ems="10"
         android:gravity="center_vertical"
@@ -173,12 +182,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etLName"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/etFName"
         android:layout_margin="2sp"
@@ -190,12 +200,13 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
     <EditText
         android:id="@+id/etPhone"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
+        android:layout_height="30dp"
         android:layout_alignStart="@+id/etFName"
         android:layout_below="@+id/etLName"
         android:layout_margin="2sp"
@@ -207,6 +218,27 @@
         android:padding="8dp"
         android:textColor="#3c4784"
         android:textColorHint="#3c4784"
+        android:textSize="14sp"
+        android:textStyle="bold|italic" />
+
+    <EditText
+        android:id="@+id/etState"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignStart="@+id/etFName"
+        android:layout_below="@+id/etCity"
+        android:layout_margin="2sp"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
+        android:background="#ffffff"
+        android:ems="10"
+        android:gravity="center_vertical"
+        android:hint="@string/state"
+        android:inputType="textEmailAddress"
+        android:padding="8dp"
+        android:textColor="#3c4784"
+        android:textColorHint="#3c4784"
+        android:textSize="14sp"
         android:textStyle="bold|italic" />
 
 </RelativeLayout>
