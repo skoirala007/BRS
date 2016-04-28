@@ -34,51 +34,49 @@ public class LogIn extends AppCompatActivity {
     ProgressBar progressBar1;
     ArrayList<String> wholeData = new ArrayList<>();
 
-
-
     //Create Handler
     Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what == 1){
-                threadRunning = false;
-                String nameAddress =(String) msg.obj;
-                progressBar1.setVisibility(View.INVISIBLE);
+            String nameAddress= (String) msg.obj;
 
-                //split the name and address
-                String splitWholeData [] = nameAddress.split("  ", 2);
-                String myName = splitWholeData [0];
-                String myAddress = splitWholeData[1];
+            //split the name and address
+            String splitWholeData [] = nameAddress.split("  ", 2);
+            String myName = splitWholeData [0];
+            String myAddress = splitWholeData[1];
 
-                //Add data to arraylist
-                wholeData.add(myName);
-                wholeData.add(myAddress);
-                wholeData.add(convertedUsername);
-                wholeData.add(convertedPassword);
+             if (myName.equals("null")){
 
-                //Start New Activity
-                Intent openDashboard = new Intent(LogIn.this,Dashboard.class);
-                openDashboard.putExtra("wholeData",wholeData);
-                startActivity(openDashboard);
+                if (failedAttempt != 0) {
+                    progressBar1.setVisibility(View.INVISIBLE);
+                    failedAttempt--;
+                    Toast.makeText(getApplicationContext(), "Incorrect Username/Password, Please Try Again",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+                    progressBar1.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getApplicationContext(), "Too Many Failed Attepts", Toast.LENGTH_SHORT).show();
+                    threadRunning = false;
+                    finish();
+                }
 
             }
-            else if (msg.what==0){
+            else {
+                 threadRunning = false;
+                 progressBar1.setVisibility(View.INVISIBLE);
+                 //Add data to arraylist
+                 wholeData.add(myName);
+                 wholeData.add(myAddress);
+                 wholeData.add(convertedUsername);
+                 wholeData.add(convertedPassword);
 
-                    if (failedAttempt != 0) {
-                        progressBar1.setVisibility(View.INVISIBLE);
-                        failedAttempt--;
-                        Toast.makeText(getApplicationContext(), "Incorrect Username/Password, Please Try Again",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        progressBar1.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getApplicationContext(), "Too Many Failed Attepts", Toast.LENGTH_SHORT).show();
-                        threadRunning = false;
-                        finish();
-                }
-
-                    }
-                }
+                 //Start New Activity
+                 Intent openDashboard = new Intent(LogIn.this,Dashboard.class);
+                 openDashboard.putExtra("wholeData",wholeData);
+                 startActivity(openDashboard);
+             }
+        }
     };
 
 
@@ -86,6 +84,11 @@ public class LogIn extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         threadRunning = false;
+        try {
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -124,6 +127,8 @@ public class LogIn extends AppCompatActivity {
                         public void run() {
 
                             String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+                            String dbUsername = "asalvatori";
+                            String dbPassword = "cs680";
                             String userFullName = null;
                             String userFullAddress = null;
                             Statement stmt = null;
@@ -141,7 +146,7 @@ public class LogIn extends AppCompatActivity {
 
                                     try{
                                         //create connection and statement objects
-                                        con = DriverManager.getConnection(URL,convertedUsername,convertedPassword);
+                                        con = DriverManager.getConnection(URL,dbUsername,dbPassword);
                                         stmt = con.createStatement();
 
                                         //Do query
@@ -153,16 +158,12 @@ public class LogIn extends AppCompatActivity {
                                             userFullAddress = (result.getString("Street") + " " + result.getString("city") +
                                                     result.getString("state"));}
 
+                                            msg = handler.obtainMessage(logIn, userFullName + "  " + userFullAddress);
 
-                                        logIn = 1;
-                                        msg = handler.obtainMessage(logIn, userFullName + "  "+ userFullAddress);
 
 
                                     }catch (SQLException e) {
                                         e.printStackTrace();
-                                        logIn = 0;
-                                        msg = handler.obtainMessage(logIn);
-
                                     }
 
                                     //Send Message
@@ -174,7 +175,13 @@ public class LogIn extends AppCompatActivity {
                             }
                             finally {
                                 // end the background thread
+
                                 threadRunning = false;
+                                try {
+                                    con.close();
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     };
