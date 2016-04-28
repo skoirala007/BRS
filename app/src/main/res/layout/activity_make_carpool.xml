@@ -202,7 +202,6 @@
             android:layout_marginEnd="20dp"
             style="@style/font"
             android:width="70dp"
-            android:inputType="number"
             android:maxLength="5"/>
 
     </LinearLayout>

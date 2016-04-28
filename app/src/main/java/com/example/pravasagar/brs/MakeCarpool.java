@@ -8,6 +8,8 @@ import android.widget.CheckBox;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 
 import android.util.Log;
 import android.widget.Toast;
@@ -19,13 +21,24 @@ public class MakeCarpool extends Activity {
 
     private EditText day_et, time_et, maxSeats_et, licensePlate_et, startStreet_et,
             startCity_et, startState_et, startZIP_et;
-    private CheckBox checkbox; // still need to make this checkbox work
+    private CheckBox checkbox;
     private String userID, day, licensePlate, startStreet, startCity, startState, startZIP;
     private int time, maxSeats;
     private Thread t = null;
+    private Thread s = null;
     private String carpoolSQL;
 
     ArrayList<String> wholeData = new ArrayList<>();
+
+    // the handler is only used for the checkbox
+    Handler handler = new Handler() {
+        public void handleMessage (Message msg) {
+            startStreet_et.setText(startStreet);
+            startCity_et.setText(startCity);
+            startState_et.setText(startState);
+            startZIP_et.setText(startZIP);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +48,7 @@ public class MakeCarpool extends Activity {
         Bundle sentData = getIntent().getExtras();
         wholeData = sentData.getStringArrayList("wholeData");
 
-        userID = wholeData.get(2);
+        userID = wholeData.get(2); // gets the username
 
         day_et = (EditText)findViewById(R.id.dayOfWeek);
         time_et = (EditText)findViewById(R.id.timeOfDay);
@@ -82,8 +95,10 @@ public class MakeCarpool extends Activity {
 
         checkbox.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                t = new Thread(select);
-                t.start();
+                if (checkbox.isChecked()){
+                    s = new Thread(select);
+                    s.start();
+                }
             }
         });
     }
@@ -106,12 +121,7 @@ public class MakeCarpool extends Activity {
             try {
                 con = DriverManager.getConnection(URL, username, password);
                 stmt = con.createStatement();
-            }
-            catch (SQLException e) {
 
-            }
-
-            try {
                 stmt.executeUpdate(carpoolSQL);
 
                 t = null;
@@ -124,6 +134,7 @@ public class MakeCarpool extends Activity {
     };
 
     private Runnable select = new Runnable() {
+        @Override
         public void run() {
             String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
             String username = "asalvatori";
@@ -133,7 +144,7 @@ public class MakeCarpool extends Activity {
                 Class.forName("com.mysql.jdbc.Driver");
             }
             catch (ClassNotFoundException e) {
-
+                Log.i("SQL", "Did not load driver");
             }
 
             Statement stmt = null;
@@ -141,31 +152,27 @@ public class MakeCarpool extends Activity {
             try {
                 con = DriverManager.getConnection(URL, username, password);
                 stmt = con.createStatement();
-            }
-            catch (SQLException e) {
 
-            }
-
-            try {
-                ResultSet rs = stmt.executeQuery
-                        ("select Street, city, state, Zip from user where User_Id = '" + userID + "');");
+                String query = "select Street, city, state, Zip from user where User_Id = '" + userID + "';";
+                ResultSet rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     startStreet = rs.getString("Street");
-                    startCity = rs. getString("city");
+                    startCity = rs.getString("city");
                     startState = rs.getString("state");
                     startZIP = rs.getString("Zip");
                 }
 
-                startStreet_et.setText(startStreet);
-                startCity_et.setText(startCity);
-                startState_et.setText(startState);
-                startZIP_et.setText(startZIP);
+                Log.i("SQL", startStreet + " " + startCity + " " + startState + " " + startZIP);
 
-                t = null;
+                // a generic message sent to the main thread to fill in the user's address
+                Message msg = handler.obtainMessage(0, "");
+                handler.sendMessage(msg);
+
+                s = null;
                 con.close();
             }
             catch (SQLException e) {
-
+                Log.i("SQL", "Something wrong happened");
             }
         }
     };
