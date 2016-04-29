@@ -32,7 +32,7 @@ public class SignUp extends AppCompatActivity {
     Handler handler = new Handler() {
 
         public void handleMessage(Message msg) {
-            if(msg.what==1){
+            if(msg.obj == 1 && msg.what==1){
                 Toast.makeText(getApplicationContext(),"Record inserted!",Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(),"Please login!",Toast.LENGTH_SHORT).show();
                 insertThread.interrupt();
