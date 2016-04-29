@@ -79,7 +79,7 @@ public class SignUp extends AppCompatActivity {
                         +state.getText()+"'"
                         +")";
                 int result=stmt.executeUpdate(query);
-                Message msg = handler.obtainMessage(1, result);
+                Message msg = handler.obtainMessage(1, (Object)result);
                 handler.sendMessage(msg);
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -140,8 +140,8 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                             userFullName = (result.getString("FirstName") + " " + result.getString("LastName"));
                             userFullAddress = (result.getString("Street") + " " + result.getString("city") +
                                     result.getString("state"));
-                            rideDate = (result.getString("User_Id"));
-                            rideTime = (result.getString("Pass"));
+                            rideDate = (result.getString("User_Id"));//date from route_details
+                            rideTime = (result.getString("Pass"));//time from route_details
 
 
                             FindData findData = new FindData(userFullName, userFullAddress, rideDate, rideTime);
