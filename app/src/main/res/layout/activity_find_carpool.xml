@@ -13,46 +13,67 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1"
-        android:text="@string/fc_name"
+        android:id="@+id/tvDay"
+        android:text="@string/fc_date"
         style="@style/fcTheme"/>
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:text="@string/fc_address"
-        android:layout_below="@+id/textView1"
-        style="@style/fcTheme"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/myFullName"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/textView1"
-        android:layout_toEndOf="@+id/textView2"
+        android:id="@+id/stateDate"
+        android:hint="@string/dateHint"
+        android:layout_toRightOf="@+id/tvDay"
+        android:layout_alignBaseline="@+id/tvDay"
+        android:layout_marginLeft="10dp"
         style="@style/fcTheme"
         />
-
-
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/myFullAddress"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_below="@+id/textView1"
-        style="@style/fcTheme"
-        />
+        android:layout_below="@+id/stateDate"
+        android:id="@+id/bSearch"
+        android:text="@string/serchRides"
+        android:onClick="searchMembers"
+        android:layout_alignParentRight="true"
+        android:textColor="#3c4784"
+        android:textStyle="bold"
+        android:background="#cb92aaf8"
+        android:gravity="center_horizontal|center_vertical"
+        android:padding="5dp"/>
 
     <fragment
         android:id="@+id/map"
         android:layout_marginTop="15dp"
-        android:layout_below="@+id/myFullAddress"
+        android:layout_below="@+id/bSearch"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="350dp"/>
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/map"
+        android:id="@+id/tvShowData"
+        android:text="@string/showMapData"
+        style="@style/fcTheme"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+
+
+        />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bsendRequest"
+        android:layout_below="@+id/map"
+        android:text="@string/sendRequest"
+        android:layout_alignParentRight="true"
+        android:textColor="#3c4784"
+        android:textStyle="bold"
+        android:background="#cb92aaf8"
+        android:padding="5dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="10dp"/>
+
 
 
 </RelativeLayout>

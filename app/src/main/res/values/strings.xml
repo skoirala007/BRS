@@ -12,7 +12,7 @@
     <string name="db_make">Make Carpool</string>
     <string name="db_see">View Carpool</string>
     <string name="db_welcome"> <u>Welcome To Dashboard</u></string>
-    <string name="fc_name">Name: </string>
+    <string name="fc_date">Please Enter Day: </string>
     <string name="fc_address">Address: </string>
     <string name="email">Email</string>
     <string name="cnfPassword">Confirm Password</string>
@@ -23,4 +23,8 @@
     <string name="fname">First Name</string>
     <string name="lname">Last Name</string>
     <string name="state">State</string>
+    <string name="serchRides">Search Rides</string>
+    <string name="dateHint">Monday</string>
+    <string name="showMapData">Click On The Icon To See Information</string>
+    <string name="sendRequest"> Send Request</string>
 </resources>
