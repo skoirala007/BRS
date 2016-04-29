@@ -8,6 +8,43 @@ class ScheduleView {
     private String day;
     private String time;
     private String driverId;
+    private String riders;
+    private String phono;
+
+    public String getRiders() {
+        return riders;
+    }
+
+    public void setRiders(String riders) {
+        this.riders = riders;
+    }
+
+    public String getPhono() {
+        return phono;
+    }
+
+    public void setPhono(String phono) {
+        this.phono = phono;
+    }
+
+    public ScheduleView(String day, String time, String driverId, String riders, String phono) {
+        this.day = day;
+        this.time = time;
+        this.driverId = driverId;
+        this.riders = riders;
+        this.phono = phono;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleView{" +
+                "day='" + day + '\'' +
+                ", time='" + time + '\'' +
+                ", driverId='" + driverId + '\'' +
+                ", riders='" + riders + '\'' +
+                ", phono='" + phono + '\'' +
+                '}';
+    }
 
     public String getDay() {
         return day;
@@ -33,18 +70,5 @@ class ScheduleView {
         driverId = driverId;
     }
 
-    public ScheduleView(String day, String time, String driverId) {
-        this.day = day;
-        this.time = time;
-        this.driverId = driverId;
-    }
 
-    @Override
-    public String toString() {
-        return "ScheduleView{" +
-                "day='" + day + '\'' +
-                ", time='" + time + '\'' +
-                ", driverId='" + driverId + '\'' +
-                '}';
-    }
 }

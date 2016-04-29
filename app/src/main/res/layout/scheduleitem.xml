@@ -24,5 +24,18 @@
         android:layout_height="wrap_content"
         android:textColor="#3c4784"
         style="@style/fcTheme"/>
+    <TextView
+        android:id="@+id/riderleft"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#3c4784"
+        style="@style/fcTheme"/>
+    <TextView
+        android:id="@+id/phone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="#3c4784"
+        style="@style/fcTheme"/>
+
 
 </LinearLayout>
