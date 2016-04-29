@@ -50,7 +50,7 @@ public class ViewCarpool extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                carpool = scheduleItems.get(position);
+                carpool = scheduleItems.get(position); // this is how you get an object from an ArrayList for a ListView or a Spinner
                 registerForContextMenu(view);
                 //System.out.println(view);
             }
