@@ -29,7 +29,7 @@
         />
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:layout_below="@+id/stateDate"
         android:id="@+id/bSearch"
         android:text="@string/serchRides"
@@ -47,7 +47,7 @@
         android:layout_below="@+id/bSearch"
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="350dp"/>
+        android:layout_height="370dp"/>
     <TextView
         android:layout_width="250dp"
         android:layout_height="wrap_content"
