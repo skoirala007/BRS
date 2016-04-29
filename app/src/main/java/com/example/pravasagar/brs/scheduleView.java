@@ -9,30 +9,32 @@ class ScheduleView {
     private String time;
     private String driverId;
     private String riders;
-    private String phono;
+    private String name;
+    private String phoneno;
 
-    public String getRiders() {
-        return riders;
-    }
-
-    public void setRiders(String riders) {
-        this.riders = riders;
-    }
-
-    public String getPhono() {
-        return phono;
-    }
-
-    public void setPhono(String phono) {
-        this.phono = phono;
-    }
-
-    public ScheduleView(String day, String time, String driverId, String riders, String phono) {
+    public ScheduleView(String day, String time, String driverId, String riders, String name, String phoneno) {
         this.day = day;
         this.time = time;
         this.driverId = driverId;
         this.riders = riders;
-        this.phono = phono;
+        this.name = name;
+        this.phoneno = phoneno;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhoneno() {
+        return phoneno;
+    }
+
+    public void setPhoneno(String phoneno) {
+        this.phoneno = phoneno;
     }
 
     @Override
@@ -42,9 +44,19 @@ class ScheduleView {
                 ", time='" + time + '\'' +
                 ", driverId='" + driverId + '\'' +
                 ", riders='" + riders + '\'' +
-                ", phono='" + phono + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneno='" + phoneno + '\'' +
                 '}';
     }
+
+    public String getRiders() {
+        return riders;
+    }
+
+    public void setRiders(String riders) {
+        this.riders = riders;
+    }
+
 
     public String getDay() {
         return day;

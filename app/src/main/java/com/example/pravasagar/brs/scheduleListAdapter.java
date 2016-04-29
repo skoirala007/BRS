@@ -30,7 +30,6 @@ class ScheduleListAdapter extends ArrayAdapter<ScheduleView> {
         TextView Time = (TextView) convertView.findViewById(R.id.time);
         TextView Driver = (TextView) convertView.findViewById(R.id.drid);
         TextView Riders = (TextView) convertView.findViewById(R.id.riderleft);
-        TextView phonoNo = (TextView) convertView.findViewById(R.id.phone);
         
         // Populate the data into the template view using the data object
         ScheduleView scheduleView = getItem(position);
@@ -39,7 +38,6 @@ class ScheduleListAdapter extends ArrayAdapter<ScheduleView> {
         Time.setText(scheduleView.getTime());
         Driver.setText(scheduleView.getDriverId());
         Riders.setText(scheduleView.getRiders());
-        phonoNo.setText(scheduleView.getPhono());
 
         // Return the completed view to render on screen
         return convertView;

@@ -30,7 +30,7 @@ public class ViewCarpool extends AppCompatActivity {
     private Thread t = null;
     String phno = null;
     Statement stmt = null;
-    private String days, timings, DriverID;
+    private String days, timings, DriverID,riders,Name,phone;
     private List<ScheduleView> scheduleItems = new ArrayList<ScheduleView>();
     private ScheduleListAdapter SchduleItemsAdapter;
     ListView listView;
@@ -75,6 +75,7 @@ public class ViewCarpool extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        System.out.println("i am here" + v.toString());
         menu.setHeaderTitle("Select your action");
         menu.add(0, v.getId(), 0, "Call the owner");
         menu.add(0, v.getId(), 0, "SMS the owner");
@@ -104,20 +105,21 @@ public class ViewCarpool extends AppCompatActivity {
     private void callOwner(MenuItem item) {
 
         //System.out.println(item);
-        carpool.getDriverId();
-//        Intent callIntent = new Intent(Intent.ACTION_CALL);
-//        callIntent.setData(Uri.parse("tel:0377778888"));
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-//        startActivity(callIntent);
+        //System.out.println(carpool.getPhoneno());
+
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:"+ carpool.getPhoneno()));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        startActivity(callIntent);
 
     }
     private void SMSOwner() {
@@ -145,16 +147,16 @@ public class ViewCarpool extends AppCompatActivity {
                         password);
                 stmt = con.createStatement();
                 ResultSet result = stmt.executeQuery(
-                        "select day,timing,Driver_Id,riders from route_details where Driver_Id = 'shru'; ");
+                        " SELECT u.phone, u.FirstName, r.day, r.timing, r.Driver_Id ,r.riders FROM user u,route_details r WHERE u.User_Id = r.Driver_Id AND r.Driver_Id = 'shru'; ");
                 //for each record in schedule
                 while (result.next()) {
                     days = result.getString("day");
                     timings = result.getString("timing");
                     DriverID = result.getString("Driver_Id");
-                    String riders = result.getString("riders");
-//                    ResultSet result2 = stmt.executeQuery(
-//                            "select city from user where User_Id ='" + DriverID +"'");
-                    ScheduleView schedule = new ScheduleView(days,timings,DriverID,riders,riders);
+                    riders = result.getString("riders");
+                    Name = result.getString("u.FirstName");
+                    phone = result.getString("u.phone");
+                    ScheduleView schedule = new ScheduleView(days,timings,DriverID,riders,Name,phone);
                     scheduleItems.add(schedule);
                 }
 
