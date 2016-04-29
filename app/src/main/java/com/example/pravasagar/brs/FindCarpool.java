@@ -131,8 +131,8 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                         stmt = con.createStatement();
 
                         //Do query
-                        ResultSet result = stmt.executeQuery("Select * from bentleycarpool.user" + " " +
-                                //","+ " " + "bentley.carpool.route_details" +
+                        ResultSet result = stmt.executeQuery("Select * from user" + " " +
+                                //","+ " " + "route_details" +
                                 "Where User_Id != " + "'" + myUsername  + "'" +" ");
                                 //+"And User_Id = Driver_Id");
 
