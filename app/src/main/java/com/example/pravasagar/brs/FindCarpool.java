@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +33,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapFragment;
 
-import org.w3c.dom.Text;
 
 
 public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback{
@@ -51,6 +51,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
     Message msg;
     TextView tvShowData;
     Button bSendRequest;
+    EditText stateDay;
 
     private GoogleMap myMap;
     private static final float zoom = 10.0f;
@@ -68,6 +69,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
         tvDay =(TextView) findViewById(R.id.tvDay);
         tvShowData = (TextView) findViewById(R.id.tvShowData);
         bSendRequest = (Button) findViewById(R.id.bsendRequest);
+        stateDay = (EditText) findViewById(R.id.stateDay);
         //make the text and button invisible
         tvShowData.setVisibility(View.INVISIBLE);
         bSendRequest.setVisibility(View.INVISIBLE);
@@ -109,6 +111,8 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             String dbPassword = "cs680";
             String userFullName = null;
             String userFullAddress = null;
+            String rideDate = null;
+            String rideTime = null;
             Statement stmt = null;
             ArrayList<String> sendData = new ArrayList<String>();
 
@@ -128,14 +132,19 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
 
                         //Do query
                         ResultSet result = stmt.executeQuery("Select * from bentleycarpool.user" + " " +
-                                "Where User_Id != " + "'" + myUsername  + "'");
+                                //","+ " " + "bentley.carpool.route_details" +
+                                "Where User_Id != " + "'" + myUsername  + "'" +" ");
+                                //+"And User_Id = Driver_Id");
 
                         while (result.next()) {
                             userFullName = (result.getString("FirstName") + " " + result.getString("LastName"));
                             userFullAddress = (result.getString("Street") + " " + result.getString("city") +
                                     result.getString("state"));
+                            rideDate = (result.getString("User_Id"));
+                            rideTime = (result.getString("Pass"));
 
-                            FindData findData = new FindData(userFullName, userFullAddress);
+
+                            FindData findData = new FindData(userFullName, userFullAddress, rideDate, rideTime);
 
                             sendData.add(findData.toString());
 
@@ -206,13 +215,15 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             String [ ]separatedData = singleData.split("  ");
             String singleName = separatedData [0];
             String singleAddress = separatedData[1];
+            String singleDay = separatedData[2];
+            String singleTime = separatedData [3];
             LatLng memberLatitudeLongitude = getLocation(getApplicationContext(), singleAddress);
             double distance = getDistance(myAddressLatLong, memberLatitudeLongitude);
             //So only drivers who resides less than 3 miles apart
-            if(distance <= 3) {
+            if(distance <= 2 ) {
                 myMap.addMarker(new MarkerOptions()
                         .position((memberLatitudeLongitude))
-                        .title("Name: "+ singleName +"\n"+ "Day: "+ "\n" +"Time: ")
+                        .title("Name: "+ singleName +"\n"+ "Day: "+ singleDay + "\n" +"Time: " + singleTime)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
             }
         }
