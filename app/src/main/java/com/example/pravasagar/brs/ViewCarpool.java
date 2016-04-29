@@ -35,6 +35,7 @@ public class ViewCarpool extends AppCompatActivity {
     private ScheduleListAdapter SchduleItemsAdapter;
     ListView listView;
     private ContextMenu.ContextMenuInfo itemMenuInfo;
+    private ScheduleView carpool;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class ViewCarpool extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                carpool = scheduleItems.get(position);
                 registerForContextMenu(view);
                 //System.out.println(view);
             }
@@ -102,7 +104,7 @@ public class ViewCarpool extends AppCompatActivity {
     private void callOwner(MenuItem item) {
 
         //System.out.println(item);
-
+        carpool.getDriverId();
 //        Intent callIntent = new Intent(Intent.ACTION_CALL);
 //        callIntent.setData(Uri.parse("tel:0377778888"));
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
