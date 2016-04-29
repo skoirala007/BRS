@@ -70,5 +70,4 @@ class ScheduleView {
         driverId = driverId;
     }
 
-
 }
