@@ -20,12 +20,15 @@
         android:layout_below="@id/yourRides"
         android:layout_marginBottom="10dp">
     </ListView>
-    <Button
-        android:id="@+id/tts"
-        android:layout_weight="0.5"
-        android:text="Read Out"
-        android:layout_below="@id/rideList"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content" />
+
+    <ProgressBar
+        android:layout_below="@id/yourRides"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="2dp"
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        >
+    </ProgressBar>
 
 </RelativeLayout>

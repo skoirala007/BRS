@@ -1,41 +1,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="15dp">
-    <TextView
-        android:id="@+id/day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="5dp"
-        android:text = "day"
-        android:textAllCaps="true"
-        android:textColor="#3c4784"
-        style="@style/fcTheme"/>
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:paddingRight="5dp"
-        android:layout_height="wrap_content"
-        android:textColor="#3c4784"
-        style="@style/fcTheme"/>
-    <TextView
-        android:id="@+id/drid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#3c4784"
-        style="@style/fcTheme"/>
-    <TextView
-        android:id="@+id/riderleft"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="#3c4784"
-        style="@style/fcTheme"/>
-    <TextView
-        android:id="@+id/phone"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textColor="#3c4784"
-        style="@style/fcTheme"/>
+    android:paddingLeft="15dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/lblDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text = "On:"
+            style="@style/fcTheme" />
+
+        <TextView
+            android:id="@+id/day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            style="@style/fcTheme" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/lblTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text = "At:"
+            style="@style/fcTheme" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:paddingRight="5dp"
+            android:layout_height="wrap_content"
+            style="@style/fcTheme" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/lblDrid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text = "With:"
+            style="@style/fcTheme" />
+
+        <TextView
+            android:id="@+id/drid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            style="@style/fcTheme" />
+
+    </LinearLayout>
 
 </LinearLayout>

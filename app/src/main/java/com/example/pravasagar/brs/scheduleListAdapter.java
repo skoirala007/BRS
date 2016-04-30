@@ -29,7 +29,6 @@ class ScheduleListAdapter extends ArrayAdapter<ScheduleView> {
         TextView Day = (TextView) convertView.findViewById(R.id.day);
         TextView Time = (TextView) convertView.findViewById(R.id.time);
         TextView Driver = (TextView) convertView.findViewById(R.id.drid);
-        TextView Riders = (TextView) convertView.findViewById(R.id.riderleft);
         
         // Populate the data into the template view using the data object
         ScheduleView scheduleView = getItem(position);

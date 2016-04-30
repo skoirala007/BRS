@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +17,9 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -26,9 +29,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ViewCarpool extends AppCompatActivity {
+public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnInitListener {
 
     String user = null;
     //Get my address from the database
@@ -40,10 +44,11 @@ public class ViewCarpool extends AppCompatActivity {
     private List<ScheduleView> scheduleItems = new ArrayList<ScheduleView>();
     private ScheduleListAdapter SchduleItemsAdapter;
     ListView listView;
+    Button btn;
+    private TextToSpeech speaker;
     private ScheduleView carpool;
-    //get extra data sent
-
-       // user = sendData.get[2];
+    ProgressBar progressBar;
+    private static final String tag = "Widgets";
 
 
     @Override
@@ -52,6 +57,14 @@ public class ViewCarpool extends AppCompatActivity {
         setContentView(R.layout.activity_view_carpool);
 
         listView = (ListView) findViewById(R.id.rideList);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
+        progressBar.setVisibility(View.VISIBLE);
+
+
+
+        //Speaker Object intialized
+        speaker = new TextToSpeech(this,this);
+        speaker.setSpeechRate(0.8f);
         Bundle sentData = getIntent().getExtras();
         wholeData = sentData.getStringArrayList("wholeData");
         user= wholeData.get(2);
@@ -80,11 +93,12 @@ public class ViewCarpool extends AppCompatActivity {
             listView = (ListView) findViewById(R.id.rideList);
             listView.setAdapter(SchduleItemsAdapter);
             t.interrupt();
+            progressBar.setVisibility(View.INVISIBLE);
+            speak("You have "+scheduleItems.size()+" carpools");
         }
     };
 
 
-    @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -143,6 +157,7 @@ public class ViewCarpool extends AppCompatActivity {
                                     }
                                     Statement stmt = null;
                                     Connection con = null;
+                                    //System.out.println("inside thread");
                                     try { //create connection to database
                                         con = DriverManager.getConnection(
                                                 URL,
@@ -152,9 +167,12 @@ public class ViewCarpool extends AppCompatActivity {
                                         int result = stmt.executeUpdate(
                                                 "UPDATE route_details SET Riders = Riders+1 where Route_id = '" + carpool.getRoute_id() + "';");
 
+                                            //add the notification code
+
                                     } catch (SQLException e) {
                                         e.printStackTrace();
                                     }
+                                    terminate.set(true);
                                 }
                             }
                         };
@@ -166,7 +184,7 @@ public class ViewCarpool extends AppCompatActivity {
                 })
                 .setNegativeButton("No", null)						//Do nothing on no
                 .show();
-        terminate.set(true);
+        //terminate.set(true);
 
 
     }
@@ -195,6 +213,35 @@ public class ViewCarpool extends AppCompatActivity {
         startActivity(sendIntent);
 
     }
+
+    @Override
+    public void onInit(int status) {
+        if (status == TextToSpeech.SUCCESS) {
+            // Set preferred language to US english.
+            int result = speaker.setLanguage(Locale.US);
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                // Language data is missing or the language is not supported.
+                Log.e(tag, "Language is not available.");
+            } else {
+                // The TTS engine has been successfully initialized
+                Log.i(tag, "TTS Initialization successful.");
+            }
+        } else {
+            // Initialization failed.
+            Log.e(tag, "Could not initialize TextToSpeech.");
+        }
+    }
+
+    /**
+     * Speaks the specified string
+     * @param text - the text to speak
+     */
+    public void speak(String text){
+        speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+
+
 
     private Runnable background = new Runnable() {
         public void run() {
@@ -245,9 +292,7 @@ public class ViewCarpool extends AppCompatActivity {
                     ScheduleView schedule = new ScheduleView(days,timings,DriverID,riders,Name,phone);
                     scheduleItems.add(schedule);
                 }
-                for (int i = 0; i < scheduleItems.size(); i++) {
-                    System.out.println(scheduleItems.get(i));
-                }
+
                 Message msg = handler.obtainMessage(1, scheduleItems);
                 handler.sendMessage(msg);
 
