@@ -42,6 +42,7 @@ public class Dashboard extends AppCompatActivity {
     //Onclick listener for making carpool
     public void seeCarpool(View view){
         Intent lauchSee = new Intent(Dashboard.this,ViewCarpool.class);
+        lauchSee.putExtra("wholeData", wholeData);
         startActivity(lauchSee);
 
 

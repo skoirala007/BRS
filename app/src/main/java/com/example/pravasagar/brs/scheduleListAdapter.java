@@ -37,7 +37,6 @@ class ScheduleListAdapter extends ArrayAdapter<ScheduleView> {
         Day.setText(scheduleView.getDay());
         Time.setText(scheduleView.getTime());
         Driver.setText(scheduleView.getDriverId());
-        Riders.setText(scheduleView.getRiders());
 
         // Return the completed view to render on screen
         return convertView;

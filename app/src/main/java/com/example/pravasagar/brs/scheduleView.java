@@ -8,16 +8,25 @@ class ScheduleView {
     private String day;
     private String time;
     private String driverId;
-    private String riders;
+    private String route_id;
     private String name;
     private String phoneno;
+
+    public String getRoute_id() {
+        return route_id;
+    }
+
+    public void setRoute_id(String route_id) {
+        this.route_id = route_id;
+    }
 
     public ScheduleView(String day, String time, String driverId, String riders, String name, String phoneno) {
         this.day = day;
         this.time = time;
         this.driverId = driverId;
-        this.riders = riders;
+        this.route_id = riders;
         this.name = name;
+
         this.phoneno = phoneno;
     }
 
@@ -43,20 +52,11 @@ class ScheduleView {
                 "day='" + day + '\'' +
                 ", time='" + time + '\'' +
                 ", driverId='" + driverId + '\'' +
-                ", riders='" + riders + '\'' +
+                ", riders='" + route_id + '\'' +
                 ", name='" + name + '\'' +
                 ", phoneno='" + phoneno + '\'' +
                 '}';
     }
-
-    public String getRiders() {
-        return riders;
-    }
-
-    public void setRiders(String riders) {
-        this.riders = riders;
-    }
-
 
     public String getDay() {
         return day;
