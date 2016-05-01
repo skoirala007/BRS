@@ -8,8 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.example.pravasagar.brs.Dashboard"
-    android:background="#ceecf8">
+    tools:context="com.example.pravasagar.brs.Dashboard">
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,7 +16,7 @@
         android:id="@+id/welcome"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="30dp"
-        android:textColor="#3c4784"
+        android:textColor="#0273C0"
         android:textSize="28sp"
         android:gravity="center_vertical|center_horizontal"
         android:textStyle="bold"

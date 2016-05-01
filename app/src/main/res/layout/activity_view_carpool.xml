@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your Rides"
-        style="@style/dbTheme"/>
+        android:textColor="#0273C0"
+        android:textStyle="bold"/>
 
     <ListView
         android:id="@+id/rideList"

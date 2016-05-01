@@ -7,8 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.pravasagar.brs.FindCarpool"
-    android:background="#ceecf8">
+    tools:context="com.example.pravasagar.brs.FindCarpool">
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,9 +34,9 @@
         android:text="@string/serchRides"
         android:onClick="searchMembers"
         android:layout_alignParentRight="true"
-        android:textColor="#3c4784"
+        android:textColor="#000000"
         android:textStyle="bold"
-        android:background="#cb92aaf8"
+        android:background="#0273C0"
         android:gravity="center_horizontal|center_vertical"
         android:padding="5dp"/>
 
@@ -67,9 +66,9 @@
         android:layout_below="@+id/map"
         android:text="@string/sendRequest"
         android:layout_alignParentRight="true"
-        android:textColor="#3c4784"
+        android:textColor="#000000"
         android:textStyle="bold"
-        android:background="#cb92aaf8"
+        android:background="#0273C0"
         android:padding="5dp"
         android:gravity="center_horizontal|center_vertical"
         android:layout_marginTop="10dp"/>
