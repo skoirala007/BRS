@@ -45,13 +45,16 @@ public class Dashboard extends AppCompatActivity {
             } catch (ClassNotFoundException e) {
                 Log.e("JDBC", "Did not load driver" + e.getMessage());
             }
-            Statement stmt = null;
-            Connection con = null;
+            Statement stmt,stmt2 = null;
+            Connection con,con2 = null;
             try { //create connection to database
                 con = DriverManager.getConnection(URL, username, password);
                 stmt = con.createStatement();
-                ResultSet result = stmt.executeQuery("select * from Notifications where receiver='shru'");
-                Log.i("Notif: ","ResultSet ready!");
+                con2 = DriverManager.getConnection(URL, username, password);
+                stmt2 = con.createStatement();
+                int val=0;
+                ResultSet result = stmt.executeQuery("select * from Notifications where receiver='"+wholeData.get(2)+"'");
+                Log.i("Notify: ","Result set ready!");
                 while(result.next()){
                     String notifMsg=result.getString("notif_msg");
                     String notifCode=result.getString("notif_Code");
@@ -59,9 +62,22 @@ public class Dashboard extends AppCompatActivity {
                     Log.i("Notif: ",notifMsg+", "+notifSender);
 
                     //send message
-                    msg = handler.obtainMessage(1,notifSender+" wants a carpool ride!");
-                    handler.sendMessage(msg);
+                    if(notifCode.equals("0")) {
+                        msg = handler.obtainMessage(1, notifSender + " wants a carpool ride!");
+                        handler.sendMessage(msg);
+                    }
+                    if(notifCode.equals("1")){
+                        msg = handler.obtainMessage(1, notifSender + " wants to Opt out!");
+                        handler.sendMessage(msg);
+                    }
+                    val=stmt2.executeUpdate("delete from notifications where sender='"+notifSender+
+                            "' and receiver='"+wholeData.get(2)+"'");
                 }
+                result.close();
+                con.close();
+                con2.close();
+                stmt.close();
+                stmt2.close();
                 //String query="select * from Notifications where receiver='"+username+"'";
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -94,7 +110,7 @@ public class Dashboard extends AppCompatActivity {
                 String messageContent=msg.obj.toString();
                 NotificationCompat.Builder mBuilder =
                         (NotificationCompat.Builder) new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.drawable.notification_icon)
+                                .setSmallIcon(R.mipmap.ic_launcher)
                                 .setContentTitle("BRS Request")
                                 .setContentText(messageContent);
 
