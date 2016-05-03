@@ -14,6 +14,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -315,5 +317,28 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
         speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.dashboard:
+                finish();
+                return true;
+            case R.id.exit:
+                Intent exitIntent = new Intent(Intent.ACTION_MAIN);
+                exitIntent.addCategory(Intent.CATEGORY_HOME);
+                exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(exitIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
 }
