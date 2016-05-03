@@ -4,10 +4,10 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,33 +15,34 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.MapFragment;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
 public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback{
 
+    private static final float zoom = 10.0f;
     //Get my address from the database
     ArrayList<String> wholeData = new ArrayList<>();
     //Create ArrayList for Address
     ArrayList<String> messageData = new ArrayList<String>();
-    Handler handler;
+    ArrayList<String> driverData = new ArrayList<String>();
+    Handler handler,requestHandler;
     String myUsername;
     String myPassword;
     String myAddress;
@@ -52,56 +53,45 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
     TextView tvShowData;
     Button bSendRequest;
     EditText stateDay;
-
-    private GoogleMap myMap;
-    private static final float zoom = 10.0f;
     MapFragment mapFragment;
+    Runnable background = new Runnable() {
+        @Override
+        public void run() {
+            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+            Connection con=null;
+            Statement stmt = null;
+            String dbUsername = "asalvatori";
+            String dbPassword = "cs680";
+            try{
+                Class.forName("com.mysql.jdbc.Driver");
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find_carpool);
-        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getView().setVisibility(View.INVISIBLE);
-
-
-        //get Reference
-        tvDay =(TextView) findViewById(R.id.tvDay);
-        tvShowData = (TextView) findViewById(R.id.tvShowData);
-        bSendRequest = (Button) findViewById(R.id.bsendRequest);
-        stateDay = (EditText) findViewById(R.id.stateDay);
-        //make the text and button invisible
-        tvShowData.setVisibility(View.INVISIBLE);
-        bSendRequest.setVisibility(View.INVISIBLE);
-
-        //get extra data sent
-        Bundle sentData = getIntent().getExtras();
-        wholeData = sentData.getStringArrayList("wholeData");
-        myName = wholeData.get(0);
-        myAddress = wholeData.get(1);
-        myUsername= wholeData.get(2);
-        myPassword= wholeData.get(3);
-
-        //Create and start Thread on start
-
-        Thread threadMemberAddress = new Thread(rMembersAddress);
-        threadRunning1 = true;
-        threadMemberAddress.start();
-
-        handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                messageData =(ArrayList<String>) msg.obj;
-                threadRunning1 = false;
-
+            }catch (ClassNotFoundException e){
+                Log.e("JDBC", "Did not load driver");
             }
-        };
-
-
-    }
-
-    //Create Runnable Object for getting Name
-
+            try {
+                //create connection and statement objects
+                con = DriverManager.getConnection(URL, dbUsername, dbPassword);
+                stmt = con.createStatement();
+                /*String driverId="";
+                for(int i=0;i<driverData.size();i++){
+                    for(int j=0;i<messageData.size();j++){
+                        if(messageData.get(j).toString().contains(driverData.get(i))){
+                            driverId=driverData.get(i);
+                            break;
+                        }
+                    }
+                }
+                Log.i("SendRequest: ",driverId);*/
+                /*String query="insert into notifications(sender,receiver,notif_Code,notif_Msg,route_Id) values("
+                        +"'"+myUsername+"','"
+                        +"'"+messageData.get(0)+"','"
+                        ;*/
+                //int resultVal=stmt.executeUpdate(query);
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    };
     Runnable rMembersAddress = new Runnable() {
         @Override
         public void run() {
@@ -172,6 +162,65 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
 
         }
     };
+    private GoogleMap myMap;
+
+    //Create Runnable Object for getting Name
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_find_carpool);
+        mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getView().setVisibility(View.INVISIBLE);
+
+
+        //get Reference
+        tvDay =(TextView) findViewById(R.id.tvDay);
+        tvShowData = (TextView) findViewById(R.id.tvShowData);
+        bSendRequest = (Button) findViewById(R.id.bsendRequest);
+        stateDay = (EditText) findViewById(R.id.stateDay);
+        //make the text and button invisible
+        tvShowData.setVisibility(View.INVISIBLE);
+        bSendRequest.setVisibility(View.INVISIBLE);
+
+        //get extra data sent
+        Bundle sentData = getIntent().getExtras();
+        wholeData = sentData.getStringArrayList("wholeData");
+        myName = wholeData.get(0);
+        myAddress = wholeData.get(1);
+        myUsername= wholeData.get(2);
+        myPassword= wholeData.get(3);
+
+        //Create and start Thread on start
+
+        Thread threadMemberAddress = new Thread(rMembersAddress);
+        threadRunning1 = true;
+        threadMemberAddress.start();
+        requestHandler= new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+
+            }
+        };
+        handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                messageData =(ArrayList<String>) msg.obj;
+                threadRunning1 = false;
+
+            }
+        };
+        bSendRequest.setOnClickListener(
+                new Button.OnClickListener(){
+                    public void onClick(View v){
+                                             //Create and start thread
+                        Thread sendRequest = new Thread(background);
+                        //threadRunning = true;
+                        sendRequest.start();
+                    }
+        });
+    }
+
     public void searchMembers(View view){
         mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         // mapFragment.getView().setVisibility(View.INVISIBLE);
@@ -226,6 +275,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                         .position((memberLatitudeLongitude))
                         .title("Name: "+ singleName +"\n"+ "User Id: "+ singleUserId + "\n" +"Time: " + singleTime)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+                driverData.add(singleUserId);
             }
         }
         //Setup Onclick listener to the marker;
@@ -235,6 +285,13 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
 
                         public boolean onMarkerClick(Marker m) {
                             String title = m.getTitle();
+                            String driverId="";
+                            for(int i=0;i<driverData.size();i++){
+                                if(title.contains(driverData.get(i))){
+                                    driverId=driverData.get(i);
+                                }
+                            }
+                            Log.i("SendRequest: ",driverId);
                             tvShowData.setText(title);
                             return true;
                         }
