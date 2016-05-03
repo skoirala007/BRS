@@ -111,7 +111,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             String dbPassword = "cs680";
             String userFullName = null;
             String userFullAddress = null;
-            String rideDate = null;
+            String userId = null;
             String rideTime = null;
             Statement stmt = null;
             ArrayList<String> sendData = new ArrayList<String>();
@@ -140,11 +140,12 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                             userFullName = (result.getString("FirstName") + " " + result.getString("LastName"));
                             userFullAddress = (result.getString("Street") + " " + result.getString("city") +
                                     result.getString("state"));
-                            rideDate = (result.getString("User_Id"));//date from route_details
+
+                            userId = (result.getString("User_Id"));//date from route_details
                             rideTime = (result.getString("Pass"));//time from route_details
 
 
-                            FindData findData = new FindData(userFullName, userFullAddress, rideDate, rideTime);
+                            FindData findData = new FindData(userFullName, userFullAddress, userId, rideTime);
 
                             sendData.add(findData.toString());
 
@@ -215,7 +216,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             String [ ]separatedData = singleData.split("  ");
             String singleName = separatedData [0];
             String singleAddress = separatedData[1];
-            String singleDay = separatedData[2];
+            String singleUserId = separatedData[2];
             String singleTime = separatedData [3];
             LatLng memberLatitudeLongitude = getLocation(getApplicationContext(), singleAddress);
             double distance = getDistance(myAddressLatLong, memberLatitudeLongitude);
@@ -223,7 +224,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             if(distance <= 2 ) {
                 myMap.addMarker(new MarkerOptions()
                         .position((memberLatitudeLongitude))
-                        .title("Name: "+ singleName +"\n"+ "Day: "+ singleDay + "\n" +"Time: " + singleTime)
+                        .title("Name: "+ singleName +"\n"+ "User Id: "+ singleUserId + "\n" +"Time: " + singleTime)
                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
             }
         }

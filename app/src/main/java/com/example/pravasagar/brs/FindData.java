@@ -6,15 +6,15 @@ package com.example.pravasagar.brs;
 class FindData {
     private String membersName;
     private String membersAddress;
-    private String rideDate;
+    private String userId;
     private String rideTime;
 
-    public String getRideDate() {
-        return rideDate;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setRideDate(String rideDate) {
-        this.rideDate = rideDate;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getRideTime() {
@@ -41,16 +41,16 @@ class FindData {
         this.membersName = membersName;
     }
 
-    public FindData(String membersName, String membersAddress, String rideDate, String rideTime){
+    public FindData(String membersName, String membersAddress, String userId, String rideTime){
         super();
         this.membersName = membersName;
         this.membersAddress = membersAddress;
-        this.rideDate = rideDate;
+        this.userId = userId;
         this.rideTime = rideTime;
     }
     @Override
     public String toString() {
-        return membersName + "  " + membersAddress + "  " + rideDate + "  " + rideTime;
+        return membersName + "  " + membersAddress + "  " + userId + "  " + rideTime;
     }
 
 
