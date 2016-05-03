@@ -86,7 +86,7 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
                 stmt = con.createStatement();
                 ResultSet result = stmt.executeQuery(
                         " SELECT u.phone, u.FirstName, r.day, r.Route_id, r.timing, r.Driver_Id ,r.riders FROM user u,route_details r WHERE u.User_Id = r.Driver_Id AND r.Driver_Id = '"+user+"'; ");
-                //for each record in schedule
+                //for each record in route_details
                 while (result.next()) {
                     days = result.getString("day");
                     timings = result.getString("timing");
@@ -103,6 +103,7 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
                                 "(select riders.User_id,r.day, r.Route_id, r.timing, r.Driver_Id from riders, route_details r where riders.Route_Id = r.Route_Id) t\n" +
                                 "\n" +
                                 "where u.User_Id = t.Driver_Id;");
+                //for each record in riders.
                 while (result2.next()) {
                     days = result2.getString("day");
                     timings = result2.getString("timing");
@@ -113,7 +114,7 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
                     ScheduleView schedule = new ScheduleView(days,timings,DriverID,riders,Name,phone);
                     scheduleItems.add(schedule);
                 }
-
+                // send the scheduleItems list to the handler
                 Message msg = handler.obtainMessage(1, scheduleItems);
                 handler.sendMessage(msg);
                 result.close();
@@ -145,16 +146,16 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
         wholeData = sentData.getStringArrayList("wholeData");
         user= wholeData.get(2);
 
-
+        //database thread started
         t = new Thread(background);
         t.start();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                carpool = scheduleItems.get(position); // this is how you get an object from an ArrayList for a ListView or a Spinner
+                // this is how you get an object from an ArrayList for ListView
+                carpool = scheduleItems.get(position);
                 registerForContextMenu(view);
-                //System.out.println(view);
             }
         });
     }
@@ -172,26 +173,23 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Call the owner") {
-            Toast.makeText(this, "Action 1 invoked", Toast.LENGTH_SHORT).show();
             callOwner(item);
         } else if (item.getTitle() == "SMS the owner") {
-            Toast.makeText(this, "Action 2 invoked", Toast.LENGTH_SHORT).show();
             SMSOwner();
         } else if (item.getTitle() == "Opt out of the group") {
-            Toast.makeText(this, "Action 3 invoked", Toast.LENGTH_SHORT).show();
-            optOut(item);
+            optOut();
         } else {
             return false;
         }
         return true;
     }
 
-    private void optOut(MenuItem item) {
+    private void optOut() {
 
         System.out.println(carpool.getRoute_id());
         int result;
         final AtomicBoolean terminate = new AtomicBoolean(false);
-        //Put up the Yes/No message box
+        //the Yes/No message box
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder
                 .setTitle("Opt out of the group")
@@ -217,7 +215,6 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
                                     }
                                     Statement stmt = null;
                                     Connection con = null;
-                                    //System.out.println("inside thread");
                                     try { //create connection to database
                                         con = DriverManager.getConnection(
                                                 URL,
@@ -227,7 +224,7 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
                                         int result = stmt.executeUpdate(
                                                 "UPDATE route_details SET Riders = Riders+1 where Route_id = '" + carpool.getRoute_id() + "';");
 
-                                            //add the notification code
+                                            // the notification code
                                         String query="insert into notifications(sender,receiver,notif_Code,notif_Msg,route_Id) values('"
                                                 +user
                                                 +"','"+carpool.getDriverId()
@@ -260,11 +257,11 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
                 })
                 .setNegativeButton("No", null)						//Do nothing on no
                 .show();
-        //terminate.set(true);
 
 
     }
 
+    // calls the Driver of the selected ride
     private void callOwner(MenuItem item) {
 
         Intent callIntent = new Intent(Intent.ACTION_CALL);
@@ -283,6 +280,7 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
 
     }
 
+   // opens the SMS messenger to send SMS to the driver of the selected ride
     private void SMSOwner() {
 
         Intent sendIntent = new Intent(Intent.ACTION_VIEW);
@@ -317,6 +315,7 @@ public class ViewCarpool extends AppCompatActivity implements TextToSpeech.OnIni
         speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
+    // the option menu
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_menu, menu);
