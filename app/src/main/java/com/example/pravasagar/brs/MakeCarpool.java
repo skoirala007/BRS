@@ -2,6 +2,10 @@ package com.example.pravasagar.brs;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.CheckBox;
@@ -17,7 +21,7 @@ import android.widget.Toast;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class MakeCarpool extends Activity {
+public class MakeCarpool extends AppCompatActivity {
 
     private EditText day_et, time_et, maxSeats_et, licensePlate_et, startStreet_et,
             startCity_et, startState_et, startZIP_et;
@@ -176,4 +180,28 @@ public class MakeCarpool extends Activity {
             }
         }
     };
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.dashboard:
+                finish();
+                return true;
+            case R.id.exit:
+                Intent exitIntent = new Intent(Intent.ACTION_MAIN);
+                exitIntent.addCategory(Intent.CATEGORY_HOME);
+                exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(exitIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 }
