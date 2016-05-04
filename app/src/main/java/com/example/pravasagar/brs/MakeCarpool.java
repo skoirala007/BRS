@@ -164,8 +164,7 @@ public class MakeCarpool extends AppCompatActivity {
 
                 // I figured a user would want to see their carpool in the View Carpool activity
                 // after making one.  Feel free to change where the user is directed
-                Intent launchView = new Intent(MakeCarpool.this, ViewCarpool.class);
-                launchView.putExtra("wholeData", wholeData);
+                Intent launchView = new Intent(MakeCarpool.this, Dashboard.class);
                 startActivity(launchView);
             }
         });
