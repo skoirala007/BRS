@@ -162,10 +162,10 @@ public class MakeCarpool extends AppCompatActivity {
 
                 Toast.makeText(MakeCarpool.this, "Carpool was Created", Toast.LENGTH_LONG).show();
 
-                // I figured a user would want to see their carpool in the View Carpool activity
-                // after making one.  Feel free to change where the user is directed
-                Intent launchView = new Intent(MakeCarpool.this, Dashboard.class);
-                startActivity(launchView);
+                // Goes back to the dashboard
+                Intent launchDash = new Intent(MakeCarpool.this, Dashboard.class);
+                launchDash.putExtra("wholeData", wholeData);
+                startActivity(launchDash);
             }
         });
 
