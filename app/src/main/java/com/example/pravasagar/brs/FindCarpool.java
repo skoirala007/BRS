@@ -1,6 +1,7 @@
 package com.example.pravasagar.brs;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -9,15 +10,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Intent;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.Menu;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,6 +46,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
     //Create ArrayList for Address
     ArrayList<String> messageData = new ArrayList<String>();
     ArrayList<String> driverData = new ArrayList<String>();
+    String driverId;
     Handler handler,requestHandler;
     String myUsername;
     String myPassword;
@@ -84,13 +85,17 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                             break;
                         }
                     }
-                }
-                Log.i("SendRequest: ",driverId);*/
-                /*String query="insert into notifications(sender,receiver,notif_Code,notif_Msg,route_Id) values("
-                        +"'"+myUsername+"','"
-                        +"'"+messageData.get(0)+"','"
-                        ;*/
-                //int resultVal=stmt.executeUpdate(query);
+                }*/
+                /*Log.i("SendRequest: ",driverId);*/
+                String query="insert into notifications(sender,receiver,notif_Code,notif_Msg,route_Id) values("
+                        +"'"+myUsername+"',"
+                        +"'"+driverId+"',"
+                        +0+","
+                        +"'Get RideShare',"
+                        +1+")";
+                int resultVal=stmt.executeUpdate(query);
+                stmt.close();
+                con.close();
             }catch (SQLException e){
                 e.printStackTrace();
             }
@@ -289,7 +294,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
 
                         public boolean onMarkerClick(Marker m) {
                             String title = m.getTitle();
-                            String driverId="";
+                            driverId="";
                             for(int i=0;i<driverData.size();i++){
                                 if(title.contains(driverData.get(i))){
                                     driverId=driverData.get(i);
