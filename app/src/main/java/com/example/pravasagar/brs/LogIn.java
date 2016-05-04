@@ -79,18 +79,7 @@ public class LogIn extends AppCompatActivity {
         }
     };
 
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        threadRunning = false;
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
