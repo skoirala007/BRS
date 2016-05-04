@@ -78,7 +78,6 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                 con = DriverManager.getConnection(URL, dbUsername, dbPassword);
                 stmt = con.createStatement();
 
-                /*Log.i("SendRequest: ",driverId);*/
                 String query="insert into notifications(sender,receiver,notif_Code,notif_Msg,route_Id) values("
                         +"'"+myUsername+"',"
                         +"'"+driverId+"',"
@@ -86,6 +85,8 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                         +"'Get RideShare',"
                         +1+")";
                 int resultVal=stmt.executeUpdate(query);
+                Message msg = handler.obtainMessage(1, resultVal);
+                handler.sendMessage(msg);
                 stmt.close();
                 con.close();
             }catch (SQLException e){
@@ -200,7 +201,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
         requestHandler= new Handler(){
             @Override
             public void handleMessage(Message msg) {
-
+                Toast.makeText(getApplicationContext(),"Request sent!",Toast.LENGTH_SHORT).show();
             }
         };
         handler = new Handler(){
