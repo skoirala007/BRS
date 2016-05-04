@@ -1,28 +1,40 @@
 package com.example.pravasagar.brs;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.CheckBox;
-import android.widget.Button;
 import android.view.View.OnClickListener;
-import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
-
-import android.util.Log;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class MakeCarpool extends AppCompatActivity {
 
+    ArrayList<String> wholeData = new ArrayList<>();
+    // the handler is only used for the checkbox
+    Handler handler = new Handler() {
+        public void handleMessage (Message msg) {
+            startStreet_et.setText(startStreet);
+            startCity_et.setText(startCity);
+            startState_et.setText(startState);
+            startZIP_et.setText(startZIP);
+        }
+    };
     private EditText day_et, time_et, maxSeats_et, licensePlate_et, startStreet_et,
             startCity_et, startState_et, startZIP_et;
     private CheckBox checkbox;
@@ -31,16 +43,76 @@ public class MakeCarpool extends AppCompatActivity {
     private Thread t = null;
     private Thread s = null;
     private String carpoolSQL;
+    private Runnable insert = new Runnable() {
+        public void run() {
+            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+            String username = "asalvatori";
+            String password = "cs680";
 
-    ArrayList<String> wholeData = new ArrayList<>();
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            }
+            catch (ClassNotFoundException e) {
 
-    // the handler is only used for the checkbox
-    Handler handler = new Handler() {
-        public void handleMessage (Message msg) {
-            startStreet_et.setText(startStreet);
-            startCity_et.setText(startCity);
-            startState_et.setText(startState);
-            startZIP_et.setText(startZIP);
+            }
+
+            Statement stmt = null;
+            Connection con = null;
+            try {
+                con = DriverManager.getConnection(URL, username, password);
+                stmt = con.createStatement();
+
+                stmt.executeUpdate(carpoolSQL);
+
+                t = null;
+                con.close();
+            }
+            catch (SQLException e) {
+
+            }
+        }
+    };
+    private Runnable select = new Runnable() {
+        @Override
+        public void run() {
+            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
+            String username = "asalvatori";
+            String password = "cs680";
+
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+            }
+            catch (ClassNotFoundException e) {
+                Log.i("SQL", "Did not load driver");
+            }
+
+            Statement stmt = null;
+            Connection con = null;
+            try {
+                con = DriverManager.getConnection(URL, username, password);
+                stmt = con.createStatement();
+
+                String query = "select Street, city, state, Zip from user where User_Id = '" + userID + "';";
+                ResultSet rs = stmt.executeQuery(query);
+                while (rs.next()) {
+                    startStreet = rs.getString("Street");
+                    startCity = rs.getString("city");
+                    startState = rs.getString("state");
+                    startZIP = rs.getString("Zip");
+                }
+
+                Log.i("SQL", startStreet + " " + startCity + " " + startState + " " + startZIP);
+
+                // a generic message sent to the main thread to fill in the user's address
+                Message msg = handler.obtainMessage(0, "");
+                handler.sendMessage(msg);
+
+                s = null;
+                con.close();
+            }
+            catch (SQLException e) {
+                Log.i("SQL", "Something wrong happened");
+            }
         }
     };
 
@@ -93,6 +165,7 @@ public class MakeCarpool extends AppCompatActivity {
                 // I figured a user would want to see their carpool in the View Carpool activity
                 // after making one.  Feel free to change where the user is directed
                 Intent launchView = new Intent(MakeCarpool.this, ViewCarpool.class);
+                launchView.putExtra("wholeData", wholeData);
                 startActivity(launchView);
             }
         });
@@ -106,80 +179,6 @@ public class MakeCarpool extends AppCompatActivity {
             }
         });
     }
-
-    private Runnable insert = new Runnable() {
-        public void run() {
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
-            String username = "asalvatori";
-            String password = "cs680";
-
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            }
-            catch (ClassNotFoundException e) {
-
-            }
-
-            Statement stmt = null;
-            Connection con = null;
-            try {
-                con = DriverManager.getConnection(URL, username, password);
-                stmt = con.createStatement();
-
-                stmt.executeUpdate(carpoolSQL);
-
-                t = null;
-                con.close();
-            }
-            catch (SQLException e) {
-
-            }
-        }
-    };
-
-    private Runnable select = new Runnable() {
-        @Override
-        public void run() {
-            String URL = "jdbc:mysql://frodo.bentley.edu:3306/bentleycarpool";
-            String username = "asalvatori";
-            String password = "cs680";
-
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-            }
-            catch (ClassNotFoundException e) {
-                Log.i("SQL", "Did not load driver");
-            }
-
-            Statement stmt = null;
-            Connection con = null;
-            try {
-                con = DriverManager.getConnection(URL, username, password);
-                stmt = con.createStatement();
-
-                String query = "select Street, city, state, Zip from user where User_Id = '" + userID + "';";
-                ResultSet rs = stmt.executeQuery(query);
-                while (rs.next()) {
-                    startStreet = rs.getString("Street");
-                    startCity = rs.getString("city");
-                    startState = rs.getString("state");
-                    startZIP = rs.getString("Zip");
-                }
-
-                Log.i("SQL", startStreet + " " + startCity + " " + startState + " " + startZIP);
-
-                // a generic message sent to the main thread to fill in the user's address
-                Message msg = handler.obtainMessage(0, "");
-                handler.sendMessage(msg);
-
-                s = null;
-                con.close();
-            }
-            catch (SQLException e) {
-                Log.i("SQL", "Something wrong happened");
-            }
-        }
-    };
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
