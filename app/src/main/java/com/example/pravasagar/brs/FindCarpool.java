@@ -85,8 +85,8 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                         +"'Get RideShare',"
                         +1+")";
                 int resultVal=stmt.executeUpdate(query);
-                Message msg = handler.obtainMessage(1, resultVal);
-                handler.sendMessage(msg);
+                Message msg = requestHandler.obtainMessage(1, resultVal);
+                requestHandler.sendMessage(msg);
                 stmt.close();
                 con.close();
             }catch (SQLException e){
