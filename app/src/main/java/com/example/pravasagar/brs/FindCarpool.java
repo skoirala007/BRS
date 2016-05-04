@@ -14,6 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Intent;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.Menu;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -131,7 +135,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
                             userFullAddress = (result.getString("Street") + " " + result.getString("city") +
                                     result.getString("state"));
 
-                            userId = (result.getString("User_Id"));//date from route_details
+                            userId = (result.getString("User_Id"));
                             rideTime = (result.getString("Pass"));//time from route_details
 
 
@@ -270,7 +274,7 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
             LatLng memberLatitudeLongitude = getLocation(getApplicationContext(), singleAddress);
             double distance = getDistance(myAddressLatLong, memberLatitudeLongitude);
             //So only drivers who resides less than 3 miles apart
-            if(distance <= 2 ) {
+            if(distance <= 3 ) {
                 myMap.addMarker(new MarkerOptions()
                         .position((memberLatitudeLongitude))
                         .title("Name: "+ singleName +"\n"+ "User Id: "+ singleUserId + "\n" +"Time: " + singleTime)
@@ -349,6 +353,32 @@ public class FindCarpool extends AppCompatActivity implements OnMapReadyCallback
 
         return distance;
     }
+
+    // the option menu
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.dashboard:
+                finish();
+                return true;
+            case R.id.exit:
+                Intent exitIntent = new Intent(Intent.ACTION_MAIN);
+                exitIntent.addCategory(Intent.CATEGORY_HOME);
+                exitIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(exitIntent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
 
 }
 
